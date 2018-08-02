@@ -1,0 +1,74 @@
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<center>
+  <div id="clock">
+    {{ curDate }}
+  </div>
+  <button id="change_time" v-on:click="update">Toggle Military Time</button>
+</center>
+
+<script>
+var military = 12;
+var clock = new Vue({
+    el: "#clock",
+    data: {
+      curDate: ""
+    },
+    methods: {
+      time () {
+        var isLate = false;
+        var time = new Date();
+        var self = this;
+        if(time.getHours() % military < 10){
+          this.curDate = "0" + ((time.getHours()) % military).toLocaleString()
+        }
+        else {
+          this.curDate = ((time.getHours()) % military).toLocaleString()
+        }
+        if(time.getMinutes() < 10){
+          this.curDate += " : 0" + time.getMinutes().toLocaleString()
+        } else {
+          this.curDate += " : " + time.getMinutes().toLocaleString()
+        }
+        if(time.getSeconds() < 10){
+          this.curDate += " : 0" + time.getSeconds().toLocaleString()
+        } else {
+          this.curDate += " : " + time.getSeconds().toLocaleString()
+        }
+
+        if (time.getHours() < 12){
+          this.curDate += " am";
+        }
+        else {
+          this.curDate += " pm";
+        }
+        setTimeout(self.time, 1000);
+      },
+    },
+    mounted: function() {
+      this.time();
+    }
+})
+
+var change_time = new Vue({
+  el: "#change_time",
+  methods: {
+    update: function(){
+      if(military == 24){
+        military = 12;
+      } else {
+        military = 24;
+      }
+    }
+  }
+})
+</script>
+
+<style>
+  #clock{
+    font-size: 100px;
+    border-color: black;
+    border-style: dotted;
+    max-width: 65%;
+    margin-top: 20%;
+  }
+</style>
